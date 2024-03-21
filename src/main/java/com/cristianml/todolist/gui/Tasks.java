@@ -10,9 +10,12 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
+import javax.swing.table.TableModel;
 
 public class Tasks extends javax.swing.JFrame {
     ArrayList<Task> taskList;
@@ -250,6 +253,20 @@ public class Tasks extends javax.swing.JFrame {
         TableColumn checkboxColumn = tblTable.getColumnModel().getColumn(1);
         checkboxColumn.setCellRenderer(tblTable.getDefaultRenderer(Boolean.class));
         checkboxColumn.setCellEditor(tblTable.getDefaultEditor(Boolean.class));
+        
+        // Agregar un listener al modelo de la tabla para detectar cambios en las celdas
+        tblTable.getModel().addTableModelListener(new TableModelListener() {
+            public void tableChanged(TableModelEvent e) {
+                int row = e.getFirstRow();
+                int column = e.getColumn();
+                if (column == 1) { // Verificar si se modificó la columna de los checkboxes
+                    TableModel model = (TableModel)e.getSource();
+                    boolean isChecked = (Boolean)model.getValueAt(row, column); // Obtener el nuevo estado del checkbox
+                    Task task = taskList.get(row); // Obtener la tarea correspondiente a la fila
+                    task.setStatus(isChecked); // Actualizar el estado de la tarea
+                }
+            }
+        });
         }
         
         public void showMassage(String message, String type, String title) {
@@ -264,7 +281,10 @@ public class Tasks extends javax.swing.JFrame {
             dialog.setVisible(true);
         }
         
+        
     }
+
+
     
     
 
