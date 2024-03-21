@@ -1,15 +1,39 @@
 package com.cristianml.todolist.gui;
 
-import java.awt.List;
+import com.cristianml.todolist.logic.Task;
+import java.awt.Component;
 import java.util.ArrayList;
+import javax.swing.DefaultCellEditor;
+import javax.swing.JCheckBox;
+import javax.swing.JLabel;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
 
 public class Tasks extends javax.swing.JFrame {
-    List<Task> taskList;
+    ArrayList<Task> taskList;
+    DefaultTableModel tableModel;
 
     public Tasks() {
         initComponents();
         this.taskList = new ArrayList<>();
+        
+        // We create the task list
+        Task task1 = new Task(1, "Anything");
+        Task task2 = new Task(3, "Anything");
+        Task task3 = new Task(4, "Anything");
+        Task task4 = new Task(5, "Anything");
+        Task task5 = new Task(6, "Anything");
+        Task task6 = new Task(2, "Anything");
+
+        taskList.add(task1);
+        taskList.add(task2);
+        taskList.add(task3);
+        taskList.add(task4);
+        taskList.add(task5);
+        taskList.add(task6);
+        
         loadDatas();
     }
 
@@ -25,9 +49,9 @@ public class Tasks extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         txtTask = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        btnAdd = new javax.swing.JButton();
+        btnEdit = new javax.swing.JButton();
+        btnDelete = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -72,11 +96,16 @@ public class Tasks extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel3.setText("Write a Task:");
 
-        jButton1.setText("Add Task");
+        btnAdd.setText("Add Task");
+        btnAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddActionPerformed(evt);
+            }
+        });
 
-        jButton2.setText("Edit Task");
+        btnEdit.setText("Edit Task");
 
-        jButton3.setText("Delete Task");
+        btnDelete.setText("Delete Task");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -95,9 +124,9 @@ public class Tasks extends javax.swing.JFrame {
                                 .addComponent(txtTask, javax.swing.GroupLayout.PREFERRED_SIZE, 378, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 102, Short.MAX_VALUE)
-                            .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, 102, Short.MAX_VALUE))))
+                            .addComponent(btnAdd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnEdit, javax.swing.GroupLayout.DEFAULT_SIZE, 102, Short.MAX_VALUE)
+                            .addComponent(btnDelete, javax.swing.GroupLayout.DEFAULT_SIZE, 102, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -107,7 +136,7 @@ public class Tasks extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel3)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 44, Short.MAX_VALUE)
+                    .addComponent(btnAdd, javax.swing.GroupLayout.DEFAULT_SIZE, 44, Short.MAX_VALUE)
                     .addComponent(txtTask))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -115,9 +144,9 @@ public class Tasks extends javax.swing.JFrame {
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 450, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(26, 26, 26)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(30, 30, 30)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(14, Short.MAX_VALUE))
         );
 
@@ -139,10 +168,19 @@ public class Tasks extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+        String description = txtTask.getText();
+        int id = (int) Math.random();
+        Task task = new Task(id, description);
+        taskList.add(task);
+        tableModel.setRowCount(0);
+        loadDatas();
+    }//GEN-LAST:event_btnAddActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JButton btnAdd;
+    private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnEdit;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -155,19 +193,34 @@ public class Tasks extends javax.swing.JFrame {
 
     // Create the Table Model
     public void loadDatas() {
-        DefaultTableModel tableModel = new DefaultTableModel(){
+        tableModel = new DefaultTableModel(){
             // Columns not editables
             @Override
             public boolean isCellEditable(int row, int column) {
-                return false;
+                return column != 0;
             }
         };
+        
         
         // We create the name columns of the table
         String[] nameColumns = {"Task","Done"};
         tableModel.setColumnIdentifiers(nameColumns);
-        // We create the task list
+        
+        // We added the tasks to the modelTable
+        for (Task task : taskList) {
+            Object[] taskObj = {task.getDescription(), task.isStatus()};
+            tableModel.addRow(taskObj);
+        }
         
         tblTable.setModel(tableModel);
+        
+        // Define the renderer and the editor of the column where you want to have the checkboxes.
+        TableColumn checkboxColumn = tblTable.getColumnModel().getColumn(1);
+        checkboxColumn.setCellRenderer(tblTable.getDefaultRenderer(Boolean.class));
+        checkboxColumn.setCellEditor(tblTable.getDefaultEditor(Boolean.class));
+        }
+        
     }
-}
+    
+    
+

@@ -59,9 +59,9 @@
                           </Group>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jButton1" max="32767" attributes="0"/>
-                              <Component id="jButton2" pref="102" max="32767" attributes="0"/>
-                              <Component id="jButton3" alignment="0" pref="102" max="32767" attributes="0"/>
+                              <Component id="btnAdd" max="32767" attributes="0"/>
+                              <Component id="btnEdit" pref="102" max="32767" attributes="0"/>
+                              <Component id="btnDelete" alignment="0" pref="102" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -76,7 +76,7 @@
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
                       <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jButton1" alignment="0" pref="44" max="32767" attributes="0"/>
+                      <Component id="btnAdd" alignment="0" pref="44" max="32767" attributes="0"/>
                       <Component id="txtTask" alignment="0" max="32767" attributes="0"/>
                   </Group>
                   <Group type="103" groupAlignment="0" attributes="0">
@@ -86,9 +86,9 @@
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
-                          <Component id="jButton2" min="-2" pref="44" max="-2" attributes="0"/>
+                          <Component id="btnEdit" min="-2" pref="44" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
-                          <Component id="jButton3" min="-2" pref="44" max="-2" attributes="0"/>
+                          <Component id="btnDelete" min="-2" pref="44" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <EmptySpace pref="14" max="32767" attributes="0"/>
@@ -182,17 +182,20 @@
         </Component>
         <Component class="javax.swing.JTextField" name="txtTask">
         </Component>
-        <Component class="javax.swing.JButton" name="jButton1">
+        <Component class="javax.swing.JButton" name="btnAdd">
           <Properties>
             <Property name="text" type="java.lang.String" value="Add Task"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAddActionPerformed"/>
+          </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="jButton2">
+        <Component class="javax.swing.JButton" name="btnEdit">
           <Properties>
             <Property name="text" type="java.lang.String" value="Edit Task"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JButton" name="jButton3">
+        <Component class="javax.swing.JButton" name="btnDelete">
           <Properties>
             <Property name="text" type="java.lang.String" value="Delete Task"/>
           </Properties>

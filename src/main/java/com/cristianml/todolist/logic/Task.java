@@ -7,10 +7,10 @@ public class Task {
     
     public Task(){};
 
-    public Task(int id, String description, boolean status) {
+    public Task(int id, String description) {
         this.id = id;
         this.description = description;
-        this.status = status;
+        this.status = false;
     }
 
     public int getId() {
