@@ -1,11 +1,14 @@
 package com.cristianml.todolist.gui;
 
+import com.cristianml.todolist.logic.LogicController;
 import com.cristianml.todolist.logic.Task;
 import java.awt.Component;
 import java.util.ArrayList;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JCheckBox;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
@@ -14,9 +17,11 @@ import javax.swing.table.TableColumn;
 public class Tasks extends javax.swing.JFrame {
     ArrayList<Task> taskList;
     DefaultTableModel tableModel;
+    LogicController control = null;
 
     public Tasks() {
         initComponents();
+        this.control = new LogicController();
         this.taskList = new ArrayList<>();
         
         // We create the task list
@@ -106,6 +111,11 @@ public class Tasks extends javax.swing.JFrame {
         btnEdit.setText("Edit Task");
 
         btnDelete.setText("Delete Task");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -177,6 +187,28 @@ public class Tasks extends javax.swing.JFrame {
         loadDatas();
     }//GEN-LAST:event_btnAddActionPerformed
 
+    // Delete a task
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        
+        if (tblTable.getRowCount() > 0) {
+            if (tblTable.getSelectedRow()!= -1) {
+                int index = tblTable.getSelectedRow();
+                Task task = taskList.get(index);
+                
+                taskList.remove(task);
+                showMassage("Deleted succesfully.", "inf", "Delete taks.");
+                tableModel.setRowCount(0);
+                loadDatas();
+            } else {
+                showMassage("None row selected.", "error", "Selected error.");
+            }
+        } else {
+            showMassage("The table is empty.", "error", "Table empty.");
+        }
+            
+        
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnDelete;
@@ -218,6 +250,18 @@ public class Tasks extends javax.swing.JFrame {
         TableColumn checkboxColumn = tblTable.getColumnModel().getColumn(1);
         checkboxColumn.setCellRenderer(tblTable.getDefaultRenderer(Boolean.class));
         checkboxColumn.setCellEditor(tblTable.getDefaultEditor(Boolean.class));
+        }
+        
+        public void showMassage(String message, String type, String title) {
+            JOptionPane optionPane = new JOptionPane(message);
+            if (type.equals("inf")) {
+                optionPane.setMessageType(JOptionPane.INFORMATION_MESSAGE);
+            } else if (type.equals("error")) {
+                optionPane.setMessageType(JOptionPane.ERROR_MESSAGE);
+            }
+            JDialog dialog = optionPane.createDialog(title);
+            dialog.setAlwaysOnTop(true);
+            dialog.setVisible(true);
         }
         
     }
