@@ -1,11 +1,15 @@
 package com.cristianml.todolist.gui;
 
+import java.awt.List;
+import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
 
 public class Tasks extends javax.swing.JFrame {
+    List<Task> taskList;
 
     public Tasks() {
         initComponents();
+        this.taskList = new ArrayList<>();
         loadDatas();
     }
 
@@ -153,12 +157,17 @@ public class Tasks extends javax.swing.JFrame {
     public void loadDatas() {
         DefaultTableModel tableModel = new DefaultTableModel(){
             // Columns not editables
-           
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
         };
         
         // We create the name columns of the table
         String[] nameColumns = {"Task","Done"};
         tableModel.setColumnIdentifiers(nameColumns);
+        // We create the task list
+        
         tblTable.setModel(tableModel);
     }
 }
