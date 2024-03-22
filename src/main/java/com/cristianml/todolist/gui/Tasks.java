@@ -12,6 +12,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
@@ -188,6 +189,7 @@ public class Tasks extends javax.swing.JFrame {
         taskList.add(task);
         tableModel.setRowCount(0);
         loadDatas();
+        
     }//GEN-LAST:event_btnAddActionPerformed
 
     // Delete a task
@@ -256,6 +258,7 @@ public class Tasks extends javax.swing.JFrame {
         
         // Agregar un listener al modelo de la tabla para detectar cambios en las celdas
         tblTable.getModel().addTableModelListener(new TableModelListener() {
+            @Override
             public void tableChanged(TableModelEvent e) {
                 int row = e.getFirstRow();
                 int column = e.getColumn();
@@ -264,9 +267,13 @@ public class Tasks extends javax.swing.JFrame {
                     boolean isChecked = (Boolean)model.getValueAt(row, column); // Obtener el nuevo estado del checkbox
                     Task task = taskList.get(row); // Obtener la tarea correspondiente a la fila
                     task.setStatus(isChecked); // Actualizar el estado de la tarea
+                    loadDatas(); // we call the same method so that the task is crossed out
                 }
             }
         });
+        // Aplicar el renderizador personalizado a la columna "Task"
+        tblTable.getColumnModel().getColumn(0).setCellRenderer(new TaskCellRenderer());
+        
         }
         
         public void showMassage(String message, String type, String title) {
@@ -281,7 +288,22 @@ public class Tasks extends javax.swing.JFrame {
             dialog.setVisible(true);
         }
         
-        
+      
+    // Crear el renderizador personalizado para la columna "Task"
+    class TaskCellRenderer extends DefaultTableCellRenderer {
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            Component cellComponent = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+            boolean isDone = (boolean) table.getValueAt(row, 1); // Verificar si el checkbox está marcado
+            if (isDone) {
+                // Tachar el texto si el checkbox está marcado
+                ((JLabel) cellComponent).setText("<html><strike>" + value.toString() + "</strike></html>");
+            } else {
+                // Mostrar el texto sin tachar si el checkbox no está marcado
+                ((JLabel) cellComponent).setText(value.toString());
+            }
+            return cellComponent;
+        }
+    }
     }
 
 
