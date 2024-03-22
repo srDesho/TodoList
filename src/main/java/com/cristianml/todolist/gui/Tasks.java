@@ -273,6 +273,8 @@ public class Tasks extends javax.swing.JFrame {
         });
         // Aplicar el renderizador personalizado a la columna "Task"
         tblTable.getColumnModel().getColumn(0).setCellRenderer(new TaskCellRenderer());
+        // Block the columns
+        tblTable.getTableHeader().setReorderingAllowed(false);
         
         }
         
