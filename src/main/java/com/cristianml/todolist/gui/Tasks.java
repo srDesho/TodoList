@@ -4,6 +4,7 @@ import com.cristianml.todolist.logic.LogicController;
 import com.cristianml.todolist.logic.Task;
 import java.awt.Component;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JCheckBox;
 import javax.swing.JDialog;
@@ -19,29 +20,14 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 
 public class Tasks extends javax.swing.JFrame {
-    ArrayList<Task> taskList;
+    LinkedList<Task> taskList;
     DefaultTableModel tableModel;
     LogicController control = null;
 
     public Tasks() {
         initComponents();
         this.control = new LogicController();
-        this.taskList = new ArrayList<>();
-        
-        // We create the task list
-        Task task1 = new Task(1, "Anything");
-        Task task2 = new Task(3, "Anything");
-        Task task3 = new Task(4, "Anything");
-        Task task4 = new Task(5, "Anything");
-        Task task5 = new Task(6, "Anything");
-        Task task6 = new Task(2, "Anything");
-
-        taskList.add(task1);
-        taskList.add(task2);
-        taskList.add(task3);
-        taskList.add(task4);
-        taskList.add(task5);
-        taskList.add(task6);
+        this.taskList = new LinkedList<>();
         
         loadDatas();
     }
@@ -113,6 +99,11 @@ public class Tasks extends javax.swing.JFrame {
         });
 
         btnEdit.setText("Edit Task");
+        btnEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditActionPerformed(evt);
+            }
+        });
 
         btnDelete.setText("Delete Task");
         btnDelete.addActionListener(new java.awt.event.ActionListener() {
@@ -184,9 +175,8 @@ public class Tasks extends javax.swing.JFrame {
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         String description = txtTask.getText();
-        int id = (int) Math.random();
-        Task task = new Task(id, description);
-        taskList.add(task);
+        Task task = new Task(1, description);
+        control.createTask(task);
         tableModel.setRowCount(0);
         loadDatas();
         
@@ -213,6 +203,24 @@ public class Tasks extends javax.swing.JFrame {
             
         
     }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
+        if (tblTable.getRowCount() > 0) {
+            if (tblTable.getSelectedRow() != -1) {
+                int index = tblTable.getSelectedRow();
+                Task task = taskList.get(index);
+                EditTask editWindow = new EditTask(task);
+                editWindow.setVisible(true);
+                editWindow.setLocationRelativeTo(null);
+                loadDatas();
+            } else { 
+                showMassage("None row selected.", "error", "Selected error.");
+                }
+             } else {
+                showMassage("The table is empty.", "error", "Table empty.");
+             }
+        
+    }//GEN-LAST:event_btnEditActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
@@ -244,6 +252,8 @@ public class Tasks extends javax.swing.JFrame {
         tableModel.setColumnIdentifiers(nameColumns);
         
         // We added the tasks to the modelTable
+        taskList = control.bringTaskList();
+        
         for (Task task : taskList) {
             Object[] taskObj = {task.getDescription(), task.isStatus()};
             tableModel.addRow(taskObj);
@@ -267,6 +277,7 @@ public class Tasks extends javax.swing.JFrame {
                     boolean isChecked = (Boolean)model.getValueAt(row, column); // Obtener el nuevo estado del checkbox
                     Task task = taskList.get(row); // Obtener la tarea correspondiente a la fila
                     task.setStatus(isChecked); // Actualizar el estado de la tarea
+                    control.editTask(task);
                     loadDatas(); // we call the same method so that the task is crossed out
                 }
             }
