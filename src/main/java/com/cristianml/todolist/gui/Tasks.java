@@ -1,12 +1,10 @@
 package com.cristianml.todolist.gui;
 
+import com.cristianml.todolist.logic.EditTaskListener;
 import com.cristianml.todolist.logic.LogicController;
 import com.cristianml.todolist.logic.Task;
 import java.awt.Component;
-import java.util.ArrayList;
 import java.util.LinkedList;
-import javax.swing.DefaultCellEditor;
-import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -15,11 +13,10 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 
-public class Tasks extends javax.swing.JFrame {
+public class Tasks extends javax.swing.JFrame implements EditTaskListener{
     LinkedList<Task> taskList;
     DefaultTableModel tableModel;
     LogicController control = null;
@@ -210,9 +207,11 @@ public class Tasks extends javax.swing.JFrame {
                 int index = tblTable.getSelectedRow();
                 Task task = taskList.get(index);
                 EditTask editWindow = new EditTask(task);
+                // Set this listener to notify
+                editWindow.setEditTaskListener(this);
                 editWindow.setVisible(true);
                 editWindow.setLocationRelativeTo(null);
-                loadDatas();
+                
             } else { 
                 showMassage("None row selected.", "error", "Selected error.");
                 }
@@ -300,6 +299,13 @@ public class Tasks extends javax.swing.JFrame {
             dialog.setAlwaysOnTop(true);
             dialog.setVisible(true);
         }
+
+        // interface Method to refresh the table
+        @Override
+        public void editTaskClosed() {
+            loadDatas();
+        }
+        
         
       
     // Crear el renderizador personalizado para la columna "Task"

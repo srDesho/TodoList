@@ -1,11 +1,13 @@
 package com.cristianml.todolist.gui;
 
+import com.cristianml.todolist.logic.EditTaskListener;
 import com.cristianml.todolist.logic.Task;
 import com.cristianml.todolist.persistence.PersistenceController;
 
 public class EditTask extends javax.swing.JFrame {
     PersistenceController control = null;
     private Task task;
+    private EditTaskListener editTaskListener;
     
     public EditTask(Task task) {
         control = new PersistenceController();
@@ -88,6 +90,10 @@ public class EditTask extends javax.swing.JFrame {
         task.setDescription(description);
         control.editTask(task);
         this.dispose();
+        // Notify to editTaskListener that this screen was closed and refresh the table.
+        if (editTaskListener != null) {
+            editTaskListener.editTaskClosed();
+        }
     }//GEN-LAST:event_btnSaveChangesActionPerformed
 
 
@@ -103,5 +109,9 @@ public class EditTask extends javax.swing.JFrame {
         txtTask.setText(task.getDescription());
     }
     
+    // This set the listener
+    public void setEditTaskListener(EditTaskListener listener) {
+        this.editTaskListener = listener;
+    }
 }
 
