@@ -183,10 +183,16 @@ public class Tasks extends javax.swing.JFrame implements EditTaskListener{
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         
         if (tblTable.getRowCount() > 0) {
-            if (tblTable.getSelectedRow()!= -1) {
-                int index = tblTable.getSelectedRow();
+        // vector of integers to store the indexes of the selected rows    
+        int[] selectedRows = tblTable.getSelectedRows();
+    
+        if (selectedRows.length > 0) {
+            for (int i = 0; i < selectedRows.length; i++) {
+                int index = selectedRows[i];
                 Task task = taskList.get(index);
                 control.deleteTask(task.getId());
+            }
+            
                 showMassage("Deleted succesfully.", "inf", "Delete taks.");
                 tableModel.setRowCount(0);
                 loadDatas();
