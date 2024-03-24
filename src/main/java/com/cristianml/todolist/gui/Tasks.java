@@ -186,8 +186,7 @@ public class Tasks extends javax.swing.JFrame implements EditTaskListener{
             if (tblTable.getSelectedRow()!= -1) {
                 int index = tblTable.getSelectedRow();
                 Task task = taskList.get(index);
-                
-                taskList.remove(task);
+                control.deleteTask(task.getId());
                 showMassage("Deleted succesfully.", "inf", "Delete taks.");
                 tableModel.setRowCount(0);
                 loadDatas();
